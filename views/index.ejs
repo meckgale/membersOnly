@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title></title>
+  </head>
+  <body>
+    <% if (currentUser) {%>
+    <h1>WELCOME BACK <%= currentUser.username %></h1>
+    <a href="/logout">LOG OUT</a>
+    <% } else { %>
+    <a href="/signup">SIGN UP</a>
+    <a href="/signin">SIGN IN</a>
+    <%}%>
+  </body>
+</html>
