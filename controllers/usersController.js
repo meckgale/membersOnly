@@ -1,6 +1,8 @@
+require("dotenv").config();
 const db = require("../config/queries");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 
 const alphaErr = "must only contain letters.";
 const matchesErr =
@@ -78,3 +80,52 @@ exports.signUp = [
     }
   },
 ];
+
+exports.becomeMember = async (req, res) => {
+  const { code } = req.body;
+  const userId = req.user.id;
+
+  const INVITE_CODE = process.env.INVITE_CODE;
+
+  if (code === INVITE_CODE) {
+    try {
+      await db.addMember(userId);
+      res.send("You have successfully joined the club!");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Database error");
+    }
+  } else {
+    res.status(400).send("Invalid code");
+  }
+};
+
+exports.login = (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      console.log("Error:", err);
+      return next(err);
+    }
+    if (!user) {
+      console.log("Login failed:", info.message);
+      return res.redirect("/login");
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        console.log("Login error:", err);
+        return next(err);
+      }
+      console.log("Login successful!");
+      return res.redirect("/");
+    });
+  })(req, res, next);
+};
+
+exports.logout = (req, res, next) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
+  });
+};

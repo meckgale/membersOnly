@@ -7,4 +7,12 @@ usersRouter.get("/signup", (req, res) =>
 );
 usersRouter.post("/signup", usersController.signUp);
 
+usersRouter.get("/become-member", (req, res) => res.render("become-member"));
+usersRouter.post("/become-member", usersController.becomeMember);
+
+usersRouter.get("/login", (req, res) => res.render("login"));
+usersRouter.post("/login", usersController.login);
+
+usersRouter.get("/log-out", usersController.logout);
+
 module.exports = usersRouter;
