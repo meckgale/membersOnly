@@ -5,10 +5,13 @@
     <title><%= title %></title>
   </head>
   <body>
+    <a href="/messages">Messages</a>
     <% if (currentUser) {%>
     <h1>Logged in as <%= currentUser.user_name %></h1>
     <% if (!currentUser.member) {%>
     <a href="/become-member">BECOME A MEMBER</a>
+    <% } %> <% if (!currentUser.admin) {%>
+    <a href="/become-admin">BECOME AN ADMIN</a>
     <% } %>
     <a href="/new-message">CREATE A NEW MESSAGE</a>
     <a href="/logout">LOG OUT</a>

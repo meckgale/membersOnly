@@ -10,9 +10,12 @@ usersRouter.post("/signup", usersController.signUp);
 usersRouter.get("/become-member", (req, res) => res.render("become-member"));
 usersRouter.post("/become-member", usersController.becomeMember);
 
+usersRouter.get("/become-admin", (req, res) => res.render("become-admin"));
+usersRouter.post("/become-admin", usersController.becomeAdmin);
+
 usersRouter.get("/login", (req, res) => res.render("login"));
 usersRouter.post("/login", usersController.login);
 
-usersRouter.get("/log-out", usersController.logout);
+usersRouter.get("/logout", usersController.logout);
 
 module.exports = usersRouter;

@@ -73,7 +73,17 @@ exports.signUp = [
         }
         // Store hashed password in the database
         await db.insertUser(firstName, lastName, userName, hashedPassword);
-        res.redirect("/");
+
+        // Retrieve the user after insertion
+        const newUser = await db.findUserByUserName(userName);
+
+        // Automatically log in the user after signup
+        req.logIn(newUser, (err) => {
+          if (err) {
+            return next(err); // Handle error in logging in
+          }
+          return res.redirect("/"); // Redirect to home after login
+        });
       });
     } catch (err) {
       return next(err);
@@ -82,15 +92,34 @@ exports.signUp = [
 ];
 
 exports.becomeMember = async (req, res) => {
-  const { code } = req.body;
+  const { codeMember } = req.body;
   const userId = req.user.id;
 
   const INVITE_CODE = process.env.INVITE_CODE;
 
-  if (code === INVITE_CODE) {
+  if (codeMember === INVITE_CODE) {
     try {
       await db.addMember(userId);
-      res.send("You have successfully joined the club!");
+      return res.redirect("/");
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Database error");
+    }
+  } else {
+    res.status(400).send("Invalid code");
+  }
+};
+
+exports.becomeAdmin = async (req, res) => {
+  const { codeAdmin } = req.body;
+  const userId = req.user.id;
+
+  const ADMIN_CODE = process.env.ADMIN_CODE;
+
+  if (codeAdmin === ADMIN_CODE) {
+    try {
+      await db.addAdmin(userId);
+      return res.redirect("/"); // redirect to the homepage or admin panel
     } catch (error) {
       console.error(error);
       res.status(500).send("Database error");

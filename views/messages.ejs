@@ -1,0 +1,30 @@
+<div>
+  <h1><%= title %></h1>
+  <% if (messages.length > 0) { %>
+  <ul>
+    <% messages.forEach(message => { %>
+    <li>
+      <p><%= message.message %></p>
+      <% if (currentUser && currentUser.admin) { %>
+      <form action="/messages/<%= message.id %>/delete" method="POST">
+        <button type="submit">Delete</button>
+      </form>
+      <% } %> <% if (currentUser && currentUser.member) { %>
+      <strong>Posted by: @<%= message.user_name %></strong>
+      <!-- Visible to members -->
+      <% } else { %>
+      <strong>Posted by: Anonymous</strong>
+      <!-- Visible to non-members -->
+      <% } %>
+      <br />
+      <small
+        >Posted at: <%= new Date(message.created_at).toLocaleString() %></small
+      >
+    </li>
+    <% }) %>
+  </ul>
+  <% } else { %>
+  <p>No messages yet.</p>
+  <% } %>
+  <a href="/">Back to home</a>
+</div>

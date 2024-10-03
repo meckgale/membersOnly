@@ -1,6 +1,7 @@
 const { Router } = require("express");
 const indexRouter = Router();
 const usersRouter = require("./usersRouter");
+const messagesRouter = require("./messagesRouter");
 
 indexRouter.get("/", (req, res) => {
   console.log("Current User:", req.user);
@@ -9,5 +10,6 @@ indexRouter.get("/", (req, res) => {
 });
 
 indexRouter.use("/", usersRouter);
+indexRouter.use("/", messagesRouter);
 
 module.exports = indexRouter;

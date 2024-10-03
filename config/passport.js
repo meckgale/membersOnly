@@ -7,7 +7,7 @@ passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
       console.log("Finding user by username...");
-      const user = await db.selectUserByUserName(username);
+      const user = await db.findUserByUserName(username);
 
       if (!user) {
         console.log("Incorrect username");
@@ -28,14 +28,12 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  console.log("Serializing user:", user.id);
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
   try {
-    console.log("Deserializing user with ID:", id);
-    const user = await db.selectUserByUserId(id); // Fetching the user by ID from the database
+    const user = await db.findUserByUserId(id); // Fetching the user by ID from the database
     if (!user) {
       console.log("User not found during deserialization");
     } else {
